@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>선물하기</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fff;
+            font-family: 'Apple SD Gothic Neo', sans-serif;
+        }
+        .container {
+            text-align: center;
+        }
+        button {
+            background-color: #F5C63A; /* 카카오 노란색 */
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        button:active {
+            background-color: #d4a72b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 이 버튼이 친구가 누를 버튼입니다 -->
+        <button onclick="sendGift()">선물하기 열기</button>
+    </div>
+
+    <script>
+        function sendGift() {
+            // 1. 주소창을 gif.kakao.com으로 위장하기 위해 history.replaceState 사용
+            window.history.replaceState({}, '', 'https://gif.kakao.com/send');
+
+            // 2. 새 창을 열되, URL은 가짜로 보이게 함
+            const gifUrl = "https://cdn.phototourl.com/free/2026-09-19-13983e64-836e-4771-b710-863ab562751a.gif";
+            const popup = window.open('', '_blank', 'width=400,height=600');
+            
+            if (popup) {
+                // 팝업 창의 HTML을 작성하여 GIF를 표시
+                popup.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>선물하기</title>
+                        <style>
+                            body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #fff; }
+                            img { max-width: 100%; max-height: 100%; }
+                        </style>
+                    </head>
+                    <body>
+                        <img src="${gifUrl}" />
+                    </body>
+                    </html>
+                `);
+                popup.document.close();
+            } else {
+                // 팝업이 막혔을 경우를 대비한 폴백: 직접 링크로 이동 (주소창은 가짜가 아님)
+                window.location.href = "https://gif.kakao.com/send";
+            }
+        }
+    </script>
+</body>
+</html>
